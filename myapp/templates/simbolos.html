@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Símbolos - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <style>
+        /* --- Identidade Visual Padrão --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 { margin: 0; font-size: 1.8em; margin-right: 30px; flex-shrink: 0; }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white; text-decoration: none; margin-left: 20px; font-size: 1em;
+            padding: 5px 10px; border-radius: 4px; transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active { color: white; background-color: var(--secondary-color); }
+        
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 60px;
+            width: 100%;
+        }
+        
+        /* Container do Texto */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            text-align: left;
+        }
+
+        /* Títulos */
+        h2 { 
+            color: var(--primary-color); 
+            font-size: 2em; 
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.3em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-left: 5px;
+            border-left: 4px solid var(--accent-water);
+            padding-left: 10px;
+        }
+
+        /* Parágrafos */
+        p {
+            line-height: 1.6;
+            font-size: 1.05em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        /* Lista de Símbolos (Estilo Grid) */
+        .symbol-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Grid responsivo */
+            gap: 15px;
+        }
+
+        .symbol-list li {
+            background-color: #f8fbff;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--hover-transition);
+        }
+
+        .symbol-list li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-color: var(--secondary-color);
+        }
+
+        /* Estilo do Símbolo (Badge) */
+        .symbol-badge {
+            width: 45px;
+            height: 45px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-family: 'Times New Roman', serif; /* Fonte serifa para parecer matemática */
+            font-style: italic;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .symbol-desc {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .symbol-desc strong {
+            color: #333;
+            font-size: 1em;
+        }
+
+        .symbol-desc span {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 2px;
+        }
+
+        /* Botão Voltar */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--hover-transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 0.9em;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            .main-content { padding-top: 20px; padding-bottom: 60px; }
+            .symbol-list { grid-template-columns: 1fr; }
+            .container { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <h2><i class="fas fa-list-ul"></i> Lista de Símbolos</h2>
+            
+            <p>Abaixo estão listadas todas as siglas, símbolos termodinâmicos e unidades de medida utilizadas nos cálculos e resultados do TERMO-CP.</p>
+
+            <h3>Propriedades de Estado</h3>
+            <ul class="symbol-list">
+                <li>
+                    <div class="symbol-badge">P</div>
+                    <div class="symbol-desc">
+                        <strong>Pressão</strong>
+                        <span>kPa (Quilopascal)</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">T</div>
+                    <div class="symbol-desc">
+                        <strong>Temperatura</strong>
+                        <span>°C (Graus Celsius)</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">v</div>
+                    <div class="symbol-desc">
+                        <strong>Volume Específico</strong>
+                        <span>m³/kg</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">u</div>
+                    <div class="symbol-desc">
+                        <strong>Energia Interna</strong>
+                        <span>kJ/kg</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">h</div>
+                    <div class="symbol-desc">
+                        <strong>Entalpia</strong>
+                        <span>kJ/kg</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">s</div>
+                    <div class="symbol-desc">
+                        <strong>Entropia</strong>
+                        <span>kJ/kg.K</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">x</div>
+                    <div class="symbol-desc">
+                        <strong>Título (Qualidade)</strong>
+                        <span>% (Percentual de vapor)</span>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Processo e Energia</h3>
+            <ul class="symbol-list">
+                <li>
+                    <div class="symbol-badge">Q</div>
+                    <div class="symbol-desc">
+                        <strong>Calor Transferido</strong>
+                        <span>kJ (Quilojoule)</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">W</div>
+                    <div class="symbol-desc">
+                        <strong>Trabalho Realizado</strong>
+                        <span>kJ (Quilojoule)</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge" style="font-size: 0.9em;">Sger</div>
+                    <div class="symbol-desc">
+                        <strong>Geração de Entropia</strong>
+                        <span>kJ/K</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge" style="font-size: 0.9em;">Tviz</div>
+                    <div class="symbol-desc">
+                        <strong>Temp. da Vizinhança</strong>
+                        <span>°C</span>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Constantes e Gás Ideal</h3>
+            <ul class="symbol-list">
+                <li>
+                    <div class="symbol-badge">R</div>
+                    <div class="symbol-desc">
+                        <strong>Constante do Gás</strong>
+                        <span>kJ/kg.K</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">k</div>
+                    <div class="symbol-desc">
+                        <strong>Coeficiente Adiabático</strong>
+                        <span>(Adimensional) Cp/Cv</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge" style="font-size: 0.8em;">Cp0</div>
+                    <div class="symbol-desc">
+                        <strong>Calor Específico (Pressão)</strong>
+                        <span>kJ/kg.K</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge" style="font-size: 0.8em;">Cv0</div>
+                    <div class="symbol-desc">
+                        <strong>Calor Específico (Volume)</strong>
+                        <span>kJ/kg.K</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="symbol-badge">n</div>
+                    <div class="symbol-desc">
+                        <strong>Índice Politrópico</strong>
+                        <span>(Adimensional)</span>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="button-container">
+                <a href="javascript:history.back()" class="btn">
+                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+</body>
+</html>

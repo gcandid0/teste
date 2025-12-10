@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecione a Propriedade Final - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <style>
+        /* Variáveis CSS */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 { margin: 0; font-size: 1.8em; margin-right: 30px; flex-shrink: 0; }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white; text-decoration: none; margin-left: 20px; font-size: 1em;
+            padding: 5px 10px; border-radius: 4px; transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active { color: white; background-color: var(--secondary-color); }
+        
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 80px 20px 40px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        /* Container Compacto */
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        h2 { 
+            color: var(--primary-color); 
+            font-size: 1.5em; 
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* --- GRID DE SELEÇÃO COMPACTO --- */
+        .selection-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px; 
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .selection-grid input[type="radio"] { display: none; }
+
+        /* Cartão Pequeno (110px) */
+        .option-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            background-color: #fff;
+            color: #666;
+        }
+
+        .option-card i {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .option-card span {
+            font-weight: bold;
+            font-size: 0.85em;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .option-card:hover {
+            border-color: var(--secondary-color);
+            background-color: #f8fbff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* ESTADO SELECIONADO */
+        .option-card:has(input:checked) {
+            border-color: var(--secondary-color);
+            background-color: #eef7fc;
+            color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(13, 106, 176, 0.15);
+        }
+
+        .option-card:has(input:checked) i { color: var(--secondary-color); }
+
+        .check-indicator {
+            position: absolute; top: 5px; right: 5px; font-size: 0.9em;
+            color: var(--secondary-color); opacity: 0; transition: opacity 0.2s ease;
+        }
+
+        .option-card:has(input:checked) .check-indicator { opacity: 1; }
+
+        /* --- INPUT DE VALOR --- */
+        #value_input_field {
+            margin-top: 15px;
+            width: 100%;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #value-label {
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            width: 100%;
+            max-width: 250px;
+            font-size: 1.1em;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            text-align: center;
+        }
+        input[type="number"]:focus { border-color: var(--secondary-color); outline: none; }
+
+        /* Botões de Ação */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--hover-transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            min-width: 130px;
+        }
+
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-primary:hover { background-color: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 0.9em;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            nav a { margin: 5px 8px; }
+            .main-content { padding-top: 20px; padding-bottom: 60px; }
+            .option-card { width: 45%; height: 100px; }
+            .button-container { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+    
+    <script>
+        function updateLabel() {
+            var selectedRadio = document.querySelector('input[name="property_choice"]:checked');
+            if (!selectedRadio) {
+                document.getElementById('value_input_field').style.display = 'none';
+                return;
+            }
+
+            var selectedValue = selectedRadio.value;
+            var label = document.getElementById('value-label');
+            var inputField = document.getElementById('value_input_field');
+            var numberInput = document.getElementById('value_input');
+
+            // Mapeamento de Labels, Ícones e Limites
+            var info = {
+                '0': { text: 'Temperatura (°C)', icon: 'fas fa-temperature-high', min: 0, max: 1000 },
+                '2': { text: 'Volume Específico (m³/kg)', icon: 'fas fa-cube', min: 0, max: 1000 },
+                '8': { text: 'Calor Transferido (kJ)', icon: 'fas fa-fire-alt', min: -50000, max: 50000 },
+                '1': { text: 'Pressão (kPa)', icon: 'fas fa-tachometer-alt', min: -500, max: 50000 },
+                '11': { text: 'Cv0', icon: 'fas fa-compress-arrows-alt', min: 0, max: 1000 },
+                '12': { text: 'Cp0', icon: 'fas fa-expand-arrows-alt', min: 0, max: 1000 },
+                '13': { text: 'R', icon: 'fas fa-registered', min: 0.0001, max: 1000 },
+                '14': { text: 'K', icon: 'fas fa-divide', min: 1.0001, max: 1000 }
+            };
+
+            if (info[selectedValue]) {
+                label.innerHTML = `<i class="${info[selectedValue].icon}"></i> Digite o valor de: ${info[selectedValue].text}`;
+                numberInput.setAttribute('min', info[selectedValue].min);
+                numberInput.setAttribute('max', info[selectedValue].max);
+                numberInput.placeholder = "Digite o valor";
+                inputField.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var radios = document.querySelectorAll('input[name="property_choice"]');
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', updateLabel);
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <i class="fas fa-edit" style="font-size: 2.2em; color: var(--accent-water); margin-bottom: 10px;"></i>
+            
+            <h2>Selecione uma Propriedade Final</h2>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="selection-grid">
+                    {% for radio in form.property_choice %}
+                    <label class="option-card">
+                        {{ radio.tag }} 
+                        <i class="fas fa-check-circle check-indicator"></i>
+                        
+                        {% if "Temperatura" in radio.choice_label %} <i class="fas fa-temperature-high"></i>
+                        {% elif "Volume" in radio.choice_label %} <i class="fas fa-cube"></i>
+                        {% elif "Calor" in radio.choice_label %} <i class="fas fa-fire-alt"></i>
+                        {% elif "Pressão" in radio.choice_label %} <i class="fas fa-tachometer-alt"></i>
+                        {% elif "Cv0" in radio.choice_label %} <i class="fas fa-compress-arrows-alt"></i>
+                        {% elif "Cp0" in radio.choice_label %} <i class="fas fa-expand-arrows-alt"></i>
+                        {% elif "R" in radio.choice_label %} <i class="fas fa-registered"></i>
+                        {% elif "K" in radio.choice_label %} <i class="fas fa-divide"></i>
+                        {% else %} <i class="fas fa-flask"></i> {% endif %}
+                        
+                        <span>{{ radio.choice_label }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <div id="value_input_field" style="display: none;">
+                    <label id="value-label" for="value_input">{{ form.value_input.label }}</label>
+                    <input type="number" id="value_input" name="value_input" step="any" required placeholder="Digite o valor">
+                </div>
+
+                <div class="button-container">
+                    <a href="{% url 'ask_known4_11' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Voltar
+                    </a>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        Calcular <i class="fas fa-calculator" style="margin-left: 8px;"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+</body>
+</html>

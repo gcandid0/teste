@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados Gás Ideal - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+
+    <style>
+        /* --- Identidade Visual Padrão --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px; 
+            flex-shrink: 0; 
+        }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+
+        /* LAYOUT PRINCIPAL (Split View) */
+        .main-content {
+            display: flex;
+            flex-direction: row; 
+            justify-content: center;
+            align-items: flex-start;
+            padding: 100px 20px 60px;
+            gap: 30px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Cartão de Resultados (Esquerda) */
+        .results-card {
+            flex: 1;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            min-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .results-card h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin: 0;
+        }
+
+        /* Seções de Dados */
+        .data-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-water);
+        }
+
+        .data-section h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95em;
+        }
+        
+        .data-row:last-child { border-bottom: none; }
+        .data-label { font-weight: bold; color: #555; }
+        .data-value { font-weight: bold; color: var(--primary-color); }
+
+        /* Slider */
+        .slider-container {
+            text-align: center;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            border: 1px solid #dbeafe;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+            accent-color: var(--secondary-color);
+        }
+
+        /* Botões */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--hover-transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            font-weight: bold;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); }
+
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover { background-color: var(--primary-color); transform: translateY(-2px); }
+
+        /* Container do Canvas (Direita) */
+        .visualization-container {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .scale-label {
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            font-family: 'Arial', sans-serif;
+            pointer-events: none;
+            text-align: right;
+            width: 60px;
+            z-index: 10;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover { color: #000; }
+
+        .modal-btn {
+            display: block;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .modal-btn:hover { background-color: var(--secondary-color); }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 2000;
+            font-size: 0.9em;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .main-content { flex-direction: column; align-items: center; }
+            .results-card, .visualization-container { width: 100%; max-width: 800px; }
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            .main-content { padding-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        
+        <div class="results-card">
+            <h2><i class="fas fa-burn"></i> Resultados</h2>
+
+            <div class="slider-container">
+                <label for="volumeSlider" style="font-weight: bold; color: var(--primary-color);">
+                    Visualizar: <span id="volumeValue">Estado Inicial</span>
+                </label>
+                <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: #666;">
+                    <span>Estado Inicial</span>
+                    <span>Estado Final</span>
+                </div>
+            </div>
+
+            <div class="data-section" id="stateInfo">
+                <h3>Dados do Estado</h3>
+                <div class="data-row"><span class="data-label">Temperatura (T):</span> <span class="data-value" id="tempVal">--</span></div>
+                <div class="data-row"><span class="data-label">Pressão (P):</span> <span class="data-value" id="presVal">--</span></div>
+                <div class="data-row"><span class="data-label">Volume Específico (v):</span> <span class="data-value" id="volVal">--</span></div>
+            </div>
+
+            <div class="data-section" style="border-left-color: var(--secondary-color);">
+                <h3>Dados do Processo</h3>
+                <div class="data-row"><span class="data-label">Trabalho (W):</span> <span class="data-value">{{ W12 }} kJ</span></div>
+                
+            </div>
+
+             <div class="data-section" style="border-left-color: #6c757d;">
+                <h3>Constantes Gás Ideal</h3>
+                <div class="data-row"><span class="data-label">R:</span> <span class="data-value">{{ R }} kJ/(kg·K)</span></div>
+                <div class="data-row"><span class="data-label">Cv0:</span> <span class="data-value">{{ Cv0 }} kJ/(kg·K)</span></div>
+                <div class="data-row"><span class="data-label">Cp0:</span> <span class="data-value">{{ Cp0 }} kJ/(kg·K)</span></div>
+                <div class="data-row"><span class="data-label">Índice (k):</span> <span class="data-value">{{ K }}</span></div>
+            </div>
+
+            <div class="button-group">
+                <a href="{% url 'ask_known5_12' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left" style="margin-right: 5px;"></i> Voltar
+                </a>
+                <button id="openModalBtn" class="btn btn-primary">
+                    Continuar Processo <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="visualization-container" id="canvas-wrapper">
+            <div id="scale-container"></div>
+        </div>
+
+    </div>
+
+    <div id="processModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 style="color: var(--primary-color);">Próximo Processo</h3>
+            <p>Selecione uma opção para continuar:</p>
+            
+            {% if teste %}
+                <a href="{% url 'ask_known5_8' %}" class="modal-btn">Aquecimento/Resfriamento à Pressão Constante</a>
+                <a href="{% url 'ask_known5_9' %}" class="modal-btn">Aquecimento/Resfriamento à Volume Constante</a>
+                <a href="{% url 'ask_known5_10' %}" class="modal-btn">Compressão/Expansão à Temperatura Constante</a>
+                <a href="{% url 'ask_known5_11' %}" class="modal-btn">Processo Politrópico</a>
+                <a href="{% url 'ask_known5_12' %}" class="modal-btn">Processo Isentrópico</a>
+            {% else %}
+                <a href="{% url 'ask_known1_8' %}" class="modal-btn">Aquecimento/Resfriamento à Pressão Constante</a>
+                <a href="{% url 'ask_known1_9' %}" class="modal-btn">Aquecimento/Resfriamento à Volume Constante</a>
+                <a href="{% url 'ask_known1_10' %}" class="modal-btn">Compressão/Expansão à Temperatura Constante</a>
+                <a href="{% url 'ask_known1_11' %}" class="modal-btn">Processo Politrópico</a>
+                <a href="{% url 'ask_known1_12' %}" class="modal-btn">Processo Isentrópico</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+
+    <script>
+        // --- DADOS DOS ESTADOS (Preenchidos via Django Template) ---
+        const state1 = {
+            temp: "{{ T1 }} °C",
+            pres: "{{ p1 }} kPa",
+            vol: "{{ v1 }} m³/kg",
+            rawV: parseFloat("{{ v1 }}".replace(',', '.'))
+        };
+
+        const state2 = {
+            temp: "{{ T2 }} °C",
+            pres: "{{ p2 }} kPa",
+            vol: "{{ v2 }} m³/kg",
+            rawV: parseFloat("{{ v2 }}".replace(',', '.'))
+        };
+
+        // Gás ideal é visualizado como vapor (fase 2)
+        const fasePadrao = 2; 
+
+        // Variável de controle do P5
+        let currentDataVolume = state1.rawV;
+        
+        // --- ATUALIZAÇÃO DA INTERFACE (Sidebar) ---
+        function updateUI(state, labelText) {
+            document.getElementById('volumeValue').textContent = labelText;
+            document.getElementById('tempVal').textContent = state.temp;
+            document.getElementById('presVal').textContent = state.pres;
+            document.getElementById('volVal').textContent = state.vol;
+        }
+
+        // Listener do Slider
+        const slider = document.getElementById("volumeSlider");
+        slider.addEventListener("input", () => {
+            if (slider.value === "1") {
+                updateUI(state1, "Estado Inicial");
+                currentDataVolume = state1.rawV;
+                estado = 1; // Dispara animação
+            } else {
+                updateUI(state2, "Estado Final");
+                currentDataVolume = state2.rawV;
+                estado = 1; // Dispara animação
+            }
+        });
+
+        // Inicializa UI
+        updateUI(state1, "Estado Inicial");
+
+        // --- LÓGICA DO MODAL ---
+        const modal = document.getElementById("processModal");
+        const openBtn = document.getElementById("openModalBtn");
+        const closeBtn = document.querySelector(".close-btn");
+
+        openBtn.onclick = () => modal.style.display = "block";
+        closeBtn.onclick = () => modal.style.display = "none";
+        window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; }
+
+        // --- VISUALIZAÇÃO P5.JS ---
+        let canvas;
+        let sides = 72;
+        let r1 = 100, r2 = 102, r3 = 100, r4 = 100;
+        let h2 = 300;
+        let ha1 = 100, ha4 = 100;
+        let hemboloB = 100, hemboloC = 60;
+        let targetHa1 = ha1, targetHa4 = ha4, targetH3B = hemboloB, targetH3C = hemboloC;
+        let estado = 0;
+
+        function setup() {
+            canvas = createCanvas(500, 600, WEBGL);
+            canvas.parent('canvas-wrapper');
+            noStroke();
+            setTimeout(createHtmlScale, 100);
+        }
+
+        function draw() {
+            background(0);
+            lights();
+            translate(0, 100);
+
+            // Animação com Lerp (Interpolação linear)
+            ha1 = lerp(ha1, targetHa1, 0.05);
+            ha4 = lerp(ha4, targetHa4, 0.05);
+            hemboloB = lerp(hemboloB, targetH3B, 0.05);
+            hemboloC = lerp(hemboloC, targetH3C, 0.05);
+
+            // Gás desenhado como "Vapor" (ha4)
+            if (ha4 < 100) {
+                fill(29, 115, 188, 30); // Azul Transparente
+                drawCap(r4, ha4); 
+                drawCap(r4, 100); 
+                drawSide(r4, ha4, 100);
+            }
+
+            // Êmbolo
+            fill(162, 162, 162);
+            drawCap(r3, hemboloB); drawCap(r3, hemboloC); drawSide(r3, hemboloC, hemboloB);
+
+            // Cilindro (Vidro)
+            fill(255, 255, 255, 10);
+            drawCap(r2, 100); drawSide(r2, 100, -h2);
+
+            comandos();
+            drawLogScaleLines(r2, -266, 108);
+        }
+
+        function drawCap(radius, y) {
+            beginShape(TRIANGLE_FAN); vertex(0, y, 0);
+            for (let j = 0; j <= sides; j++) {
+                let theta = TWO_PI / sides * j;
+                vertex(cos(theta) * radius, y, sin(theta) * radius);
+            }
+            endShape(CLOSE);
+        }
+
+        function drawSide(radius, topY, bottomY) {
+            beginShape(TRIANGLE_STRIP);
+            for (let j = 0; j <= sides; j++) {
+                let theta = TWO_PI / sides * j;
+                vertex(cos(theta) * radius, topY, sin(theta) * radius);
+                vertex(cos(theta) * radius, bottomY, sin(theta) * radius);
+            }
+            endShape(CLOSE);
+        }
+
+        function drawLogScaleLines(radius, min, max) {
+            stroke(255); strokeWeight(1);
+            [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000].forEach(d => {
+                let y = logDivisionToHeight(d, min, max);
+                line(-radius-10, y, -radius, y);
+            });
+            noStroke();
+        }
+
+        function logDivisionToHeight(val, min, max) {
+            return map(log(val), log(0.0001), log(1000), max, min);
+        }
+
+        function createHtmlScale() {
+            const scaleContainer = document.getElementById('scale-container');
+            scaleContainer.innerHTML = ''; 
+            const canvasRect = canvas.elt.getBoundingClientRect();
+            const wrapperRect = document.getElementById('canvas-wrapper').getBoundingClientRect();
+            
+            const canvasCenterX = (canvasRect.left - wrapperRect.left) + width / 2;
+            const canvasCenterY = (canvasRect.top - wrapperRect.top) + height / 2;
+
+            let logDivisions = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000];
+            for (let div of logDivisions) {
+                let yPosP5 = logDivisionToHeight(div, -266, 108);
+                let yPosCSS = canvasCenterY + 100 + yPosP5 - 6;
+                let xPosCSS = canvasCenterX - r2 - 85; 
+                
+                let label = document.createElement('div');
+                label.className = 'scale-label';
+                let finalNum = nfc(div, 4).replace('.', ',');
+                if(finalNum.endsWith(',0000')) finalNum = parseInt(div); 
+                label.innerText = finalNum; 
+
+                label.style.top = yPosCSS + 'px';
+                label.style.left = xPosCSS + 'px';
+                scaleContainer.appendChild(label);
+            }
+        }
+
+        function windowResized() { setTimeout(createHtmlScale, 100); }
+
+        function comandos() {
+            if (estado == 0) {
+                estado = 1; 
+            } else if (estado == 1) {
+                try {
+                    // Configuração Gás Ideal: Altura calculada com base no volume atual
+                    // O gás é visualizado como "fase 2" (Vapor Superaquecido)
+                    targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
+                    targetH3C = targetH3B - 40;
+                    targetHa4 = targetH3B; // Gás preenche até o êmbolo
+                    targetHa1 = logDivisionToHeight(0.00001, -260, 100); // Sem líquido
+                    
+                    estado = 2; // Estável
+                } catch (e) { console.error(e); }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <style>
+        /* Variáveis CSS para Cores Profissionais */
+        :root {
+            --primary-color: #20376B; /* Azul Escuro */
+            --secondary-color: #0D6AB0; /* Azul Médio */
+            --accent-water: #00A8FF; /* Azul Claro/Ciano (Água) */
+            --accent-gas: #53B366; /* Verde (Gás) */
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        /* Base e Layout */
+        * {
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px; 
+            flex-shrink: 0; 
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+        
+        /* CONTEÚDO PRINCIPAL E CENTRALIZAÇÃO */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 40px;
+            width: 100%;
+        }
+        
+        /* Content Wrapper para o layout lado a lado */
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        /* Seção de Destaque (Hero) - PROPORCIONAL (50%) */
+        .hero-section {
+            flex: 1; 
+            min-width: 0;
+            padding: 30px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .hero-icon {
+            font-size: 3em;
+            color: var(--accent-water);
+            margin-bottom: 10px;
+        }
+
+        .hero-section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 2em;
+        }
+
+        .hero-section p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        /* Container de Menus - PROPORCIONAL (50%) */
+        .container {
+            flex: 1; 
+            min-width: 0; 
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        /* ALINHAMENTO DO MENU */
+        .button-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            margin-top: 10px; 
+            align-items: flex-start; 
+            width: 100%; 
+        }
+
+        /* Estilo Base dos Botões de Navegação (Nível 1, 2 e 3) */
+        .substance-button, .submenu-item, .sub-sub-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-size: 1.1em; 
+            transition: var(--hover-transition); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            width: 100%; 
+            /* Importante para o position: absolute do ícone */
+            position: relative;
+        }
+        
+        /* HIERARQUIA E RECUO */
+        
+        /* Submenu Containers Nível 2 */
+        .submenu-container { 
+            margin-top: 5px; 
+            margin-left: 20px; 
+            padding-left: 20px; 
+            border-left: 3px solid #ddd; 
+            gap: 8px; 
+            align-items: flex-start; 
+            width: calc(100% - 20px); 
+        }
+        
+        /* Submenus de Nível 2 (Propriedades e Cilindro) */
+        .submenu-item {
+            /* Padrão: space-between para Cilindro Pistão e Nível 1 */
+            justify-content: space-between; 
+            background-color: #4a6797;
+            font-size: 1em;
+            width: 100%; 
+        }
+
+        /* CENTRALIZAÇÃO DO TEXTO 'PROPRIEDADES' */
+        .submenu-item:not(.cylinder-toggle) {
+            /* Centraliza o conteúdo (ícone e texto) */
+            justify-content: center;
+        }
+
+        /* Ícone de Erlenmeyer (Propriedades) - Mover para a esquerda */
+        .submenu-item:not(.cylinder-toggle) .icon-left {
+            /* Tira o ícone do fluxo e o move para a extrema esquerda */
+            position: absolute;
+            left: 15px; /* Posição igual ao padding do botão */
+            margin-right: 0; /* Remove margem extra */
+        }
+
+        /* Oculta o spacer (que era para alinhar) pois o absolute já resolve */
+        .submenu-item .spacer {
+            display: none;
+        }
+
+
+        /* Sub-Sub-Menus (Estados/Processos) */
+        .sub-sub-menu { 
+            margin-left: 20px;
+            padding-left: 0; 
+            width: calc(100% - 20px); 
+            border-left: none; 
+        }
+
+        .sub-sub-item { 
+            padding: 10px; 
+            font-size: 0.95em; 
+            justify-content: center; 
+            width: 100%;
+        }
+
+        /* Estilos de Cores (mantidos) */
+        .substance-button { background-color: var(--primary-color); font-weight: bold; }
+        .substance-button:hover { background-color: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+        .icon-left { margin-right: 10px; font-size: 1.2em; }
+        .submenu-item:hover { background-color: #6a82b0; }
+        .cylinder-toggle { background-color: #3b88b0; }
+        .cylinder-toggle:hover { background-color: #5aa1c2; }
+        #aguaCilindro .sub-sub-item { background-color: var(--accent-water); }
+        #aguaCilindro .sub-sub-item:hover { background-color: #4dc2ff; }
+        #gasCilindro .sub-sub-item { background-color: var(--accent-gas); }
+        #gasCilindro .sub-sub-item:hover { background-color: #6fc884; }
+        .hidden { display: none !important; }
+
+        /* Seção de Recursos (Features) */
+        .features-section { max-width: 1200px; width: 100%; text-align: center; padding: 20px; }
+        .features-section h2 { color: var(--secondary-color); margin-bottom: 30px; font-size: 1.8em; border-bottom: 3px solid var(--secondary-color); display: inline-block; padding-bottom: 5px; }
+        .feature-list { display: flex; justify-content: space-around; gap: 20px; }
+        .feature-card { background: var(--card-bg); padding: 20px; border-radius: 10px; box-shadow: var(--shadow); flex: 1; min-width: 250px; transition: transform 0.3s ease; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); }
+        .feature-card i { font-size: 2.5em; color: var(--accent-gas); margin-bottom: 10px; }
+        .feature-card h4 { color: var(--primary-color); margin-top: 0; }
+
+
+        /* Rodapé */
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+            margin-top: auto;
+        }
+
+        /* Ícone de seta animada */
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+        .arrow.rotate {
+            transform: rotate(90deg);
+        }
+
+        /* Media Queries para Responsividade */
+        @media (max-width: 992px) {
+            /* Empilha Hero e Menu */
+            .content-wrapper { flex-direction: column; align-items: center; gap: 20px; }
+            .hero-section, .container { flex: auto; max-width: 800px; }
+            .feature-list { flex-direction: column; align-items: center; }
+            .feature-card { max-width: 80%; }
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            nav a { margin: 5px 8px; }
+            .main-content { padding-top: 20px; }
+            
+            /* Ajustes para mobile: Remove margens de hierarquia para maximizar a largura */
+            .submenu-container { padding-left: 10px; border-left: none; margin-left: 0; width: 100%; }
+            .sub-sub-menu { padding-left: 20px; margin-left: 0; width: 100%; }
+
+            /* Em mobile, não usamos position: absolute para centralizar o texto */
+            .submenu-item:not(.cylinder-toggle) {
+                 justify-content: center;
+            }
+            .submenu-item:not(.cylinder-toggle) .icon-left {
+                position: static;
+                margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/" class="active">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="content-wrapper">
+            
+            <div class="hero-section">
+                <i class="fas fa-microscope hero-icon"></i>
+                <h2>Explore a Termodinâmica</h2>
+                <p>
+                    O TERMO-CP é sua ferramenta essencial para simular e visualizar as propriedades e processos termodinâmicos de substâncias puras e gases ideais em ambientes de cilindro-pistão. Calcule estados e entenda processos de forma interativa e precisa, facilitando seu aprendizado e pesquisa.
+                </p>
+                <p style="font-style: italic; color: var(--secondary-color);">
+                    A termodinâmica estuda as interações entre calor, trabalho e energia. Selecione uma substância ao lado para começar sua análise!
+                </p>
+            </div>
+
+            <div class="container">
+                <h3>Selecione uma das opções para iniciar a simulação:</h3>
+                
+                <div class="button-container">
+                    <a href="#" onclick="toggleAgua(); return false;" class="substance-button">
+                        <i class="fas fa-tint icon-left"></i> Água <i id="arrowAgua" class="fas fa-chevron-right arrow"></i>
+                    </a>
+                    <div id="aguaMenu" class="button-container submenu-container hidden">
+                        <a href="{% url 'ask_known1_2' %}" class="submenu-item">
+                            <i class="fas fa-flask icon-left"></i> Propriedades
+                        </a>
+                        <a href="#" onclick="toggleAguaCilindro(); return false;" class="submenu-item cylinder-toggle">
+                            <i class="fas fa-fill-drip icon-left"></i> Cilindro Pistão <i id="arrowAguaCil" class="fas fa-chevron-right arrow"></i>
+                        </a>
+                        <div id="aguaCilindro" class="button-container submenu-container sub-sub-menu hidden">
+                            <a href="{% url 'ask_known1' %}" class="sub-sub-item">
+                                Estados
+                            </a>
+                            <a href="{% url 'processos' %}" class="sub-sub-item">
+                                Processos Termodinâmicos
+                            </a>
+                        </div>
+                    </div>
+
+                    <a href="#" onclick="toggleGas(); return false;" class="substance-button">
+                        <i class="fas fa-atom icon-left"></i> Gás Ideal <i id="arrowGas" class="fas fa-chevron-right arrow"></i>
+                    </a>
+                    <div id="gasIdealMenu" class="button-container submenu-container hidden">
+                        <a href="{% url 'ask_known3_6' %}" class="submenu-item">
+                            <i class="fas fa-gas-pump icon-left"></i> Propriedades
+                        </a>
+                        <a href="#" onclick="toggleGasCilindro(); return false;" class="submenu-item cylinder-toggle">
+                            <i class="fas fa-thermometer-half icon-left"></i> Cilindro Pistão <i id="arrowGasCil" class="fas fa-chevron-right arrow"></i>
+                        </a>
+                        <div id="gasCilindro" class="button-container submenu-container sub-sub-menu hidden">
+                            <a href="{% url 'ask_known3_7' %}" class="sub-sub-item">
+                                Estados
+                            </a>
+                            <a href="{% url 'processos2' %}" class="sub-sub-item">
+                                Processos Termodinâmicos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="features-section">
+            <h2>Nossos Diferenciais</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Simulações de Processos</h4>
+                    <p>Visualize os estados e processos no cilindro-pistão.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-calculator"></i>
+                    <h4>Cálculo de Propriedades</h4>
+                    <p>Determine estados termodinâmicos (P, T, v, u, h, s) rapidamente com base em duas variáveis de entrada.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4>Foco Educacional</h4>
+                    <p>Ferramenta ideal para estudantes e profissionais de Engenharia e Física que trabalham com Termodinâmica.</p>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <footer>
+        <p>&copy; 2025 TERMO-CP. Desenvolvido para Estudos de Termodinâmica.</p>
+    </footer>
+
+    <script>
+        // Utilitários (O código JS de alternância de menus foi mantido inalterado)
+        function show(menuId, arrowId) {
+            const menu = document.getElementById(menuId);
+            const arrow = document.getElementById(arrowId);
+            if (menu) menu.classList.remove('hidden');
+            if (arrow) arrow.classList.add('rotate');
+        }
+
+        function hide(menuId, arrowId) {
+            const menu = document.getElementById(menuId);
+            const arrow = document.getElementById(arrowId);
+            if (menu) menu.classList.add('hidden');
+            if (arrow) arrow.classList.remove('rotate');
+        }
+
+        // Fecha um menu e TODOS os seus filhos
+        function closeTree(rootId, rootArrowId, children = []) {
+            hide(rootId, rootArrowId);
+            children.forEach(child => {
+                hide(child.id, child.arrow);
+                if (child.children && child.children.length) {
+                    closeTree(child.id, child.arrow, child.children);
+                }
+            });
+        }
+
+        // Alternância exclusiva entre dois grupos (A x B)
+        function toggleExclusive(openTarget, openArrow, groupA, groupB) {
+            const targetEl = document.getElementById(openTarget);
+            const isOpening = targetEl.classList.contains('hidden');
+
+            // Fecha todos de ambos os grupos
+            groupA.forEach(node => closeTree(node.id, node.arrow, node.children || []));
+            groupB.forEach(node => closeTree(node.id, node.arrow, node.children || []));
+
+            // Se a intenção era abrir, abre apenas o alvo
+            if (isOpening) {
+                show(openTarget, openArrow);
+            }
+        }
+
+        // Configuração das árvores de menus (para fechar filhos juntos)
+        const aguaTree = [
+            { id: 'aguaMenu', arrow: 'arrowAgua', children: [
+                { id: 'aguaCilindro', arrow: 'arrowAguaCil' }
+            ]}
+        ];
+        const gasTree = [
+            { id: 'gasIdealMenu', arrow: 'arrowGas', children: [
+                { id: 'gasCilindro', arrow: 'arrowGasCil' }
+            ]}
+        ];
+
+        // Handlers que você vai chamar nos onclick
+        function toggleAgua() {
+            toggleExclusive('aguaMenu', 'arrowAgua', aguaTree, gasTree);
+        }
+        function toggleGas() {
+            toggleExclusive('gasIdealMenu', 'arrowGas', gasTree, aguaTree);
+        }
+        function toggleAguaCilindro() {
+            const abrir = document.getElementById('aguaCilindro').classList.contains('hidden');
+            hide('gasCilindro', 'arrowGasCil');
+            hide('aguaCilindro', 'arrowAguaCil');
+            closeTree('gasIdealMenu', 'arrowGas', [{ id: 'gasCilindro', arrow: 'arrowGasCil' }]);
+            show('aguaMenu', 'arrowAgua');
+            if (abrir) show('aguaCilindro', 'arrowAguaCil');
+        }
+        function toggleGasCilindro() {
+            const abrir = document.getElementById('gasCilindro').classList.contains('hidden');
+            hide('aguaCilindro', 'arrowAguaCil');
+            hide('gasCilindro', 'arrowGasCil');
+            closeTree('aguaMenu', 'arrowAgua', [{ id: 'aguaCilindro', arrow: 'arrowAguaCil' }]);
+            show('gasIdealMenu', 'arrowGas');
+            if (abrir) show('gasCilindro', 'arrowGasCil');
+        }
+    </script>
+</body>
+</html>

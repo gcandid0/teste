@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+
+    <style>
+        /* --- Variáveis CSS (Verde para Gás Ideal) --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-gas: #53B366; /* Verde */
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px; 
+            flex-shrink: 0; 
+        }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+
+        /* LAYOUT PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 60px;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        /* Cartão de Resultados */
+        .results-card {
+            max-width: 600px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 40px 30px;
+            margin-top: 20px;
+        }
+
+        .results-card h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Linhas de Dados */
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1.1em;
+        }
+        
+        .data-row:last-of-type { border-bottom: none; }
+        .data-label { font-weight: bold; color: #555; }
+        .data-value { font-weight: bold; color: var(--accent-gas); } /* Valor Verde */
+
+        /* Lista Extra */
+        .extra-info ul {
+            padding-left: 20px;
+            margin-top: 15px;
+            color: #666;
+            background-color: #f9f9f9;
+            padding: 15px 15px 15px 35px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-gas);
+        }
+
+        /* Botões */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--hover-transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            min-width: 140px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); }
+
+        .btn-primary {
+            background-color: var(--accent-gas);
+            color: white;
+        }
+        .btn-primary:hover { background-color: #3a9d51; transform: translateY(-2px); }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 0.9em;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            nav a { margin: 5px 8px; }
+            .main-content { padding-top: 20px; padding-bottom: 60px; }
+            .button-group { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        
+        <div class="results-card">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <i class="fas fa-atom" style="font-size: 3em; color: var(--accent-gas);"></i>
+            </div>
+
+            <h2>Propriedades do Gás Ideal</h2>
+            
+            <div class="data-row">
+                <span class="data-label">Temperatura (T):</span>
+                <span class="data-value">{{ temperatura }} °C</span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Pressão (P):</span>
+                <span class="data-value">{{ pressao }} kPa</span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Volume Específico (v):</span>
+                <span class="data-value">{{ volume }} m³/kg</span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Constante R:</span>
+                <span class="data-value">{{ R }} kJ/kg.K</span>
+            </div>
+
+            {% if result %}
+            <div class="extra-info">
+                <ul>
+                    {% for line in result %}
+                        <li>{{ line }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="button-group">
+                <a href="{% url 'ask_known2_6' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left" style="margin-right: 5px;"></i> Voltar
+                </a>
+                
+                <a href="{% url 'ask_known3_6' %}" class="btn btn-primary">
+                    <i class="fas fa-redo" style="margin-right: 5px;"></i> Novo Cálculo
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+</body>
+</html>

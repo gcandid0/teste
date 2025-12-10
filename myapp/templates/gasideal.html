@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gás Ideal - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <style>
+        /* Variáveis CSS */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-gas: #53B366; /* Verde característico do Gás */
+            --accent-gas-hover: #3a9d51;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px; 
+            flex-shrink: 0; 
+        }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+        
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 40px;
+            width: 100%;
+            justify-content: flex-start;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        h2 { color: var(--primary-color); font-size: 2em; margin-bottom: 5px; }
+        h3 { color: var(--primary-color); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        
+        .button-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            margin-top: 20px; 
+            align-items: flex-start; 
+            width: 100%; 
+        }
+
+        /* --- ESTILO DOS BOTÕES --- */
+        
+        /* Base para todos os botões */
+        .substance-button, .submenu-item, .sub-sub-item { 
+            display: flex; 
+            align-items: center; 
+            padding: 15px; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-size: 1.1em; 
+            transition: var(--hover-transition); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            width: 100%; 
+            position: relative; /* Necessário para o absolute funcionar */
+            min-height: 54px; 
+        }
+        
+        /* Botões Nível 1 (Propriedades e Cilindro) */
+        .substance-button { 
+            background-color: var(--primary-color); 
+            font-weight: bold; 
+            justify-content: center; /* Centraliza o texto */
+        }
+        
+        .substance-button:hover { 
+            background-color: var(--secondary-color); 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        }
+
+        /* Ícone da Esquerda (Fixo na esquerda) */
+        .substance-button .icon-left {
+            position: absolute;
+            left: 20px;
+            font-size: 1.3em;
+        }
+
+        /* Seta da Direita (Fixa na direita) */
+        .substance-button .arrow {
+            position: absolute;
+            right: 20px;
+        }
+
+        /* Botão Propriedades (Ajustes de layout apenas) */
+        .propriedades-item {
+            /* Removemos a cor de fundo específica para herdar o azul do substance-button */
+            justify-content: center;
+        }
+        
+        /* Mantém o ícone fixo na esquerda */
+        .propriedades-item .icon-left {
+            position: absolute;
+            left: 20px;
+            font-size: 1.3em;
+        }
+
+        /* Submenus (Nível 2) - Hierarquia */
+        .submenu-container { 
+            margin-top: 5px; 
+            margin-left: 20px; 
+            padding-left: 20px; 
+            border-left: 3px solid #ddd; 
+            gap: 8px; 
+            align-items: flex-start; 
+            width: calc(100% - 20px); 
+        }
+        
+        /* Botões finais (Estados/Processos) - Verdes */
+        .sub-sub-item { 
+            padding: 10px; 
+            font-size: 0.95em; 
+            justify-content: center; 
+            background-color: var(--accent-gas); 
+            width: 100%; 
+        }
+
+        .sub-sub-item:hover { background-color: var(--accent-gas-hover); }
+        .hidden { display: none !important; }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: auto;
+        }
+
+        /* Seta animada */
+        .arrow { transition: transform 0.3s ease; }
+        .arrow.rotate { transform: rotate(90deg); }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            nav a { margin: 5px 8px; }
+            .main-content { padding-top: 20px; }
+            .submenu-container { padding-left: 0; border-left: none; margin-left: 0; width: 100%; }
+            
+            /* Ajustes Mobile */
+            .substance-button { justify-content: space-between; }
+            .substance-button .icon-left, .substance-button .arrow { position: static; }
+            .propriedades-item { justify-content: flex-start; }
+            .propriedades-item .icon-left { position: static; margin-right: 15px; }
+        }
+    </style>
+    <script>
+        function toggleMenu(id, arrowId) {
+            const menu = document.getElementById(id);
+            const arrow = document.getElementById(arrowId);
+            menu.classList.toggle('hidden');
+            arrow.classList.toggle('rotate');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}" class="active">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+    <div class="main-content">
+        <div class="container">
+            <i class="fas fa-atom hero-icon" style="font-size: 3em; color: var(--accent-gas); margin-bottom: 10px;"></i>
+            
+            <h2>Gás Ideal</h2>
+            <p>Selecione uma das opções abaixo.</p>
+            
+            <div class="button-container">
+                <a href="{% url 'ask_known3_6' %}" class="substance-button propriedades-item">
+                    <i class="fas fa-gas-pump icon-left"></i> 
+                    Propriedades
+                </a>
+                
+                <a href="#" onclick="toggleMenu('gasCilindro','arrowGasCil'); return false;" class="substance-button">
+                    <i class="fas fa-thermometer-half icon-left"></i> 
+                    Cilindro Pistão 
+                    <i id="arrowGasCil" class="fas fa-chevron-right arrow"></i>
+                </a>
+                
+                <div id="gasCilindro" class="button-container submenu-container hidden">
+                    <a href="{% url 'ask_known3_7' %}" class="sub-sub-item">Estados</a>
+                    <a href="{% url 'processos2' %}" class="sub-sub-item">Processos Termodinâmicos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+</body>
+</html>

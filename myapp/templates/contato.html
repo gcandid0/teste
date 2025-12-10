@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe e Contato - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <style>
+        /* --- Identidade Visual (Baseada na página Sobre) --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif; /* Padronizado com Sobre */
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER (Idêntico ao Sobre) */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 { margin: 0; font-size: 1.8em; margin-right: 30px; flex-shrink: 0; }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white; text-decoration: none; margin-left: 20px; font-size: 1em;
+            padding: 5px 10px; border-radius: 4px; transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active { color: white; background-color: var(--secondary-color); }
+        
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 60px;
+            width: 100%;
+        }
+        
+        /* Container Principal (Mesma largura do Sobre) */
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* Títulos */
+        h2 { 
+            color: var(--primary-color); 
+            font-size: 2em; 
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- GRID DE EQUIPE (Estilo Cards do Sobre) --- */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsivo */
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .profile-card {
+            background-color: #f8fbff; /* Mesmo tom azulado claro dos cards do Sobre */
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            transition: var(--hover-transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-color: var(--secondary-color);
+            background-color: white;
+        }
+
+        /* Avatar Circular */
+        .avatar {
+            width: 90px;
+            height: 90px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+
+        .profile-name {
+            font-size: 1.3em;
+            color: #333;
+            margin: 0 0 5px;
+            font-weight: bold;
+        }
+
+        .profile-role {
+            color: var(--secondary-color);
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .profile-desc {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1; /* Empurra os links para baixo */
+        }
+
+        /* Links Sociais (Tags estilo Sobre) */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .social-tag {
+            background-color: #eee;
+            color: #555;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: var(--hover-transition);
+        }
+
+        .social-tag i { color: var(--primary-color); }
+
+        .social-tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .social-tag:hover i { color: white; }
+
+
+        /* --- SEÇÃO DE FEEDBACK --- */
+        .feedback-section {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            max-width: 800px; /* Um pouco mais estreito que o container */
+            margin: 0 auto; /* Centralizado */
+        }
+
+        .form-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .form-header h3 { 
+            color: var(--secondary-color); 
+            margin-bottom: 10px; 
+            font-size: 1.4em;
+        }
+        
+        .form-header p { color: #666; font-size: 0.95em; }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        textarea { resize: vertical; min-height: 120px; }
+
+        input:focus, textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            background-color: #fff;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--hover-transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 0.9em;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: relative; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
+            nav a { margin: 0; }
+            .main-content { padding-top: 30px; padding-bottom: 60px; }
+            .team-grid { grid-template-columns: 1fr; }
+            .feedback-section { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="#">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}" class="active">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            
+            <h2><i class="fas fa-users"></i> Equipe de Desenvolvimento</h2>
+
+            <div class="team-grid">
+                <div class="profile-card">
+                    <div class="avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="profile-name">Gabriel Candido</h3>
+                    <div class="profile-role">Aluno de Eng. Mecânica</div>
+                    <p class="profile-desc">
+                        Estudante de Engenharia Mecânica. Responsável pelo desenvolvimento full-stack da plataforma TERMO-CP e implementação dos algoritmos termodinâmicos.
+                    </p>
+                    <div class="social-links">
+                        <a href="mailto:gabrielcandidomds@gmail.com" class="social-tag"><i class="fas fa-envelope"></i> Email</a>
+                        <a href="https://www.linkedin.com/in/gabriel-candido-235637226/" target="_blank" class="social-tag"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                        <a href="http://lattes.cnpq.br/6696786236047929" target="_blank" class="social-tag"><i class="fas fa-file-alt"></i> Lattes</a>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="avatar">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="profile-name">Prof. Dr. Fábio B. Fonseca</h3>
+                    <div class="profile-role">Professor Orientador</div>
+                    <p class="profile-desc">
+                        Professor do Departamento de Engenharia Mecânica. Orientador acadêmico do projeto, responsável pela validação científica e supervisão técnica.
+                    </p>
+                    <div class="social-links">
+                        <a href="mailto:fabio.fonseca@ufr.edu.br" class="social-tag"><i class="fas fa-university"></i> Email</a>
+                        <a href="http://lattes.cnpq.br/4673164208199862" target="_blank" class="social-tag"><i class="fas fa-file-alt"></i> Lattes</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-section">
+                <div class="form-header">
+                    <h3><i class="fas fa-paper-plane"></i> Fale Conosco</h3>
+                    <p>Reporte erros, tire dúvidas ou envie sugestões diretamente para a equipe.</p>
+                </div>
+
+                <form action="#" method="post">
+                    {% csrf_token %} 
+                    <div class="form-group">
+                        <label for="nome">Seu Nome:</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Seu E-mail:</label>
+                        <input type="email" id="email" name="email" placeholder="Para retornarmos o contato" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mensagem">Mensagem:</label>
+                        <textarea id="mensagem" name="mensagem" placeholder="Descreva o erro ou sua sugestão detalhadamente..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        Enviar Mensagem <i class="fas fa-chevron-right" style="margin-left: 5px;"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+</body>
+</html>

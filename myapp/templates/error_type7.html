@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviso - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <style>
+        /* --- Identidade Visual Padrão --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --error-color: #dc3545; /* Vermelho para erros */
+            --warning-color: #ffc107; /* Amarelo para avisos */
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px; 
+            flex-shrink: 0; 
+        }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+        
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 80px 20px 40px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        /* Container Compacto */
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 40px 30px;
+            text-align: center;
+            /* Linha superior colorida para indicar status */
+            border-top: 5px solid var(--error-color); 
+        }
+
+        h2 { 
+            color: var(--primary-color); 
+            font-size: 1.6em; 
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+
+        .message-box {
+            margin-bottom: 30px;
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        /* Botões de Ação */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--hover-transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            min-width: 160px;
+        }
+
+        /* Botão Genérico de Voltar (Azul Claro) */
+        .btn-retry {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        .btn-retry:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Botão Home (Cinza) */
+        .btn-home {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-home:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 0.9em;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            .main-content { padding-top: 20px; padding-bottom: 60px; }
+            .button-container { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <i class="fas fa-exclamation-circle" style="font-size: 3.5em; color: var(--error-color); margin-bottom: 20px;"></i>
+            
+            <h2>Ops! Algo deu errado.</h2>
+            
+            <div class="message-box">
+                <p>Não foi possível processar sua solicitação com os dados informados.</p>
+                <p style="font-size: 0.9em; margin-top: 10px;">Verifique se os valores estão dentro dos limites aceitáveis e tente novamente.</p>
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="btn btn-retry" onclick="history.back()">
+                    <i class="fas fa-redo" style="margin-right: 8px;"></i> Tentar Novamente
+                </button>
+                
+                <a href="/" class="btn btn-home">
+                    <i class="fas fa-home" style="margin-right: 8px;"></i> Início
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+</body>
+</html>

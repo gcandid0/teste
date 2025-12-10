@@ -1,0 +1,47 @@
+<!-- templates/error_type.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erro de Tipo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8d7da;
+            color: #721c24;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #721c24;
+        }
+        p {
+            font-size: 16px;
+        }
+        a {
+            color: #721c24;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Erro de Tipo</h1>
+        <p>Ocorreu um erro de tipo:</p>
+        <p><strong>{{ message }}</strong></p>
+        <a href="/">Início</a>
+    </div>
+</body>
+</html>

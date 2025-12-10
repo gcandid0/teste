@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+
+    <style>
+        /* --- Identidade Visual Padrão --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+            overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px; 
+            flex-shrink: 0; 
+        }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+
+        /* LAYOUT PRINCIPAL (Split View) */
+        .main-content {
+            display: flex;
+            flex-direction: row; /* Lado a lado */
+            justify-content: center;
+            align-items: flex-start;
+            padding: 100px 20px 60px; /* Espaço para header e footer */
+            gap: 30px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Cartão de Resultados (Esquerda) */
+        .results-card {
+            flex: 1;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            min-width: 300px;
+        }
+
+        .results-card h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        /* Estilização dos Parágrafos de Dados */
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1.05em;
+        }
+        
+        .data-row:last-child { border-bottom: none; }
+        .data-label { font-weight: bold; color: #555; }
+        .data-value { font-weight: bold; color: var(--primary-color); }
+
+        /* Container do Canvas (Direita) */
+        .visualization-container {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #000; /* Fundo preto para combinar com o p5 default */
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            min-height: 600px; /* Altura do canvas */
+        }
+
+        /* Botões */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--hover-transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            font-weight: bold;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        .btn-primary:hover { background-color: var(--primary-color); transform: translateY(-2px); }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 2000;
+            font-size: 0.9em;
+        }
+
+        /* Labels da Escala do P5 */
+        .scale-label {
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            font-family: 'Arial', sans-serif;
+            pointer-events: none;
+            text-align: right;
+            width: 60px;
+            z-index: 10;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .results-card { width: 100%; max-width: 800px; }
+            .visualization-container { width: 100%; max-width: 800px; }
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            .main-content { padding-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        
+        <div class="results-card">
+            <h2><i class="fas fa-clipboard-list"></i> Propriedades da Água</h2>
+            
+            <div class="data-row">
+                <span class="data-label">Fase:</span>
+                <span class="data-value">
+                    {% if fase == 1 %} Líquido comprimido
+                    {% elif fase == 2 %} Vapor superaquecido
+                    {% elif fase == 3 %} Região de saturação
+                    {% endif %}
+                </span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Temperatura (T):</span>
+                <span class="data-value">{{ temperatura }} °C</span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Pressão (P):</span>
+                <span class="data-value">{{ pressao }} kPa</span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Volume Específico (v):</span>
+                <span class="data-value">{{ volume_especifico }} m³/kg</span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Energia Interna (u):</span>
+                <span class="data-value">{{ energia_interna }} kJ/kg</span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Entalpia (h):</span>
+                <span class="data-value">{{ entalpia_especifica }} kJ/kg</span>
+            </div>
+            
+            <div class="data-row">
+                <span class="data-label">Entropia (s):</span>
+                <span class="data-value">{{ entropia_especifica }} kJ/kg.K</span>
+            </div>
+
+            {% if fase == 3 %}
+            <div class="data-row">
+                <span class="data-label">Título (x):</span>
+                <span class="data-value">{{ titulo }} %</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Volume Líquido (vl):</span>
+                <span class="data-value">{{ VolumeL }} m³/kg</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Volume Vapor (vv):</span>
+                <span class="data-value">{{ VolumeV }} m³/kg</span>
+            </div>
+            {% endif %}
+
+            {% if result %}
+            <div style="margin-top: 15px; border-top: 2px solid #eee; padding-top: 10px;">
+                <ul style="padding-left: 20px; margin: 0;">
+                    {% for line in result %}
+                        <li>{{ line }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="button-group">
+                <a href="{% url 'ask_known2' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left" style="margin-right: 5px;"></i> Voltar
+                </a>
+                <a href="{% url 'ask_known1' %}" class="btn btn-primary">
+                    <i class="fas fa-redo" style="margin-right: 5px;"></i> Novo Cálculo
+                </a>
+            </div>
+        </div>
+
+        <div class="visualization-container" id="canvas-wrapper">
+            <div id="scale-container"></div>
+            </div>
+
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+
+    <script>
+        let sides = 72;
+        let r1 = 100;
+        let r2 = 102;
+        let r3 = 100;
+        let r4 = 100;
+        let h2 = 300;
+        let ha1 = 100;
+        let ha4 = 100;
+
+        let hemboloB = 100;
+        let hemboloC = 60;
+
+        let targetHa1 = ha1;
+        let targetHa4 = ha4;
+        let targetH3B = hemboloB;
+        let targetH3C = hemboloC;
+
+        let estado = 0;
+        // Tratamento de variáveis Django para JS
+        var volumeEspecifico = "{{ volume_especifico }}".replace(',', '.');
+        var fase = "{{ fase }}";
+        var volumeL = "{{ VolumeL }}".replace(',', '.');
+
+        let dataVolume = parseFloat(volumeEspecifico).toFixed(10);
+        let dataFase = parseInt(fase, 10);
+        const dataVL = parseFloat(volumeL);
+
+        let canvas;
+
+        function setup() {
+            // Cria o canvas e anexa ao container correto
+            // Ajustei o tamanho para caber no layout, mas você pode aumentar se quiser
+            canvas = createCanvas(800, 600, WEBGL);
+            canvas.parent('canvas-wrapper'); 
+            
+            noStroke();
+            // Chama a criação da escala HTML após o canvas estar posicionado
+            setTimeout(createHtmlScale, 100); 
+        }
+
+        function draw() {
+            background(0); // Fundo preto técnico
+            lights();
+            translate(0, 100);
+
+            ha1 = lerp(ha1, targetHa1, 0.1);
+            ha4 = lerp(ha4, targetHa4, 0.1);
+            hemboloB = lerp(hemboloB, targetH3B, 0.1);
+            hemboloC = lerp(hemboloC, targetH3C, 0.1);
+
+            if (ha1 < 100) {
+                fill(29, 115, 188, 300);
+                drawCap(r1, ha1);
+                drawCap(r1, 100);
+                drawSide(r1, ha1, 100);
+            }
+
+            if (ha4 < 100) {
+                fill(29, 115, 188, 30);
+                drawCap(r4, ha4);
+                drawCap(r4, 100);
+                drawSide(r4, ha4, 100);
+            }
+
+            fill(162, 162, 162);
+            drawCap(r3, hemboloB);
+            drawCap(r3, hemboloC);
+            drawSide(r3, hemboloC, hemboloB);
+
+            fill(255, 255, 255, 10);
+            drawCap(r2, 100);
+            drawSide(r2, 100, -h2);
+
+            comandos();
+            drawLogScaleLines(r2, -266, 108);
+        }
+
+        // Função ajustada para pegar posição correta dentro do novo layout
+        function createHtmlScale() {
+            const scaleContainer = document.getElementById('scale-container');
+            // Limpa labels antigos se houver resize
+            scaleContainer.innerHTML = ''; 
+            
+            // Pega posição do Canvas dentro da página
+            const canvasRect = canvas.elt.getBoundingClientRect();
+            const wrapperRect = document.getElementById('canvas-wrapper').getBoundingClientRect();
+
+            // Centro relativo ao container pai (wrapper)
+            const canvasCenterX = (canvasRect.left - wrapperRect.left) + width / 2;
+            const canvasCenterY = (canvasRect.top - wrapperRect.top) + height / 2;
+
+            let logDivisions = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000];
+            for (let div of logDivisions) {
+                let yPosP5 = logDivisionToHeight(div, -266, 108);
+                // Ajuste fino da posição Y e X baseado na sua lógica original
+                let yPosCSS = canvasCenterY + 100 + yPosP5 - 6;
+                let xPosCSS = canvasCenterX - r2 - 85;
+
+                let label = document.createElement('div');
+                label.className = 'scale-label';
+
+                let numeroOriginal = nfc(div, 4);
+                let semVirgula = numeroOriginal.replace(',', '|');
+                let comVirgulaDecimal = semVirgula.replace('.', ',');
+                let numeroFinal = comVirgulaDecimal.replace('|', '.');
+
+                label.innerText = numeroFinal;
+                label.style.top = yPosCSS + 'px';
+                label.style.left = xPosCSS + 'px';
+
+                scaleContainer.appendChild(label);
+            }
+        }
+        
+        // Recalcula escala se a janela for redimensionada
+        function windowResized() {
+             setTimeout(createHtmlScale, 100);
+        }
+
+        function drawCap(radius, y) {
+            beginShape(TRIANGLE_FAN);
+            vertex(0, y, 0);
+            for (let j = 0; j <= sides; j++) {
+                let theta = TWO_PI / sides * j;
+                let x = cos(theta) * radius;
+                let z = sin(theta) * radius;
+                vertex(x, y, z);
+            }
+            endShape(CLOSE);
+        }
+
+        function drawSide(radius, topY, bottomY) {
+            beginShape(TRIANGLE_STRIP);
+            for (let j = 0; j <= sides; j++) {
+                let theta = TWO_PI / sides * j;
+                let x = cos(theta) * radius;
+                let z = sin(theta) * radius;
+                vertex(x, topY, z);
+                vertex(x, bottomY, z);
+            }
+            endShape(CLOSE);
+        }
+
+        function drawLogScaleLines(radius, minHeight, maxHeight) {
+            stroke(255);
+            strokeWeight(1);
+            let logDivisions = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000];
+            for (let div of logDivisions) {
+                let logPosition = logDivisionToHeight(div, minHeight, maxHeight);
+                line(-radius - 10, logPosition, -radius, logPosition);
+            }
+            noStroke();
+        }
+
+        function logDivisionToHeight(division, minHeight, maxHeight) {
+            return map(log(division), log(0.0001), log(1000), maxHeight, minHeight);
+        }
+
+        function comandos() {
+            if (estado == 0) {
+                estado = 1;
+            }
+            else if (estado == 1) {
+                try {
+                    let opcao = dataFase;
+                    if (opcao == 1) {
+                        targetH3B = logDivisionToHeight(dataVolume, -260, 100);
+                        targetH3C = targetH3B - 40;
+                        targetHa1 = targetH3B;
+                        targetHa4 = logDivisionToHeight(-0.00001, -260, 100);
+                        estado = 0;
+                    }
+                    else if (opcao == 2) {
+                        targetH3B = logDivisionToHeight(dataVolume, -260, 100);
+                        targetH3C = targetH3B - 40;
+                        targetHa4 = targetH3B;
+                        targetHa1 = logDivisionToHeight(-0.00001, -260, 100);
+                        estado = 0;
+                    }
+                    else if (opcao == 3) {
+                        targetH3B = logDivisionToHeight(dataVolume, -260, 100);
+                        targetH3C = targetH3B - 40;
+                        targetHa4 = targetH3B;
+                        targetHa1 = logDivisionToHeight(dataVL, -260, 100);
+                        estado = 0;
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

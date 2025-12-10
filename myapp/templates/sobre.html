@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <style>
+        /* --- Identidade Visual (Baseada no simbolos.html) --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 { margin: 0; font-size: 1.8em; margin-right: 30px; flex-shrink: 0; }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white; text-decoration: none; margin-left: 20px; font-size: 1em;
+            padding: 5px 10px; border-radius: 4px; transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active { color: white; background-color: var(--secondary-color); }
+        
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 60px;
+            width: 100%;
+        }
+        
+        /* Container do Texto */
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            text-align: left;
+        }
+
+        /* Títulos */
+        h2 { 
+            color: var(--primary-color); 
+            font-size: 2em; 
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.3em;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            padding-left: 5px;
+            border-left: 4px solid var(--accent-water);
+            padding-left: 10px;
+        }
+
+        /* Parágrafos */
+        p {
+            line-height: 1.6;
+            font-size: 1.05em;
+            color: #555;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* --- GRID DE CARDS --- */
+        .card-grid {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+        }
+
+        .card-item {
+            background-color: #f8fbff;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--hover-transition);
+        }
+
+        .card-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-color: var(--secondary-color);
+            background-color: white;
+        }
+
+        /* Estilo do Ícone/Badge circular */
+        .icon-badge {
+            width: 45px;
+            height: 45px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .icon-badge.math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        /* Descrição dentro do card */
+        .card-desc {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-desc strong {
+            color: #333;
+            font-size: 1em;
+            margin-bottom: 2px;
+        }
+
+        .card-desc span {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        /* Tecnologias (Tags) */
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background-color: #eee;
+            color: #555;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--hover-transition);
+        }
+        
+        .tag i { color: var(--primary-color); }
+        
+        .tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .tag:hover i { color: white; }
+
+        /* Botões */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            gap: 20px; /* Espaço entre os botões */
+            flex-wrap: wrap; /* Para mobile */
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--hover-transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Botão secundário (Opcional, para diferenciar) */
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+        .btn-secondary:hover {
+            background-color: var(--accent-water);
+        }
+
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: relative; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
+            nav a { margin: 0; }
+            .main-content { padding-top: 30px; padding-bottom: 60px; }
+            .card-grid { grid-template-columns: 1fr; } 
+            .container { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="#">Gás Ideal</a>
+            <a href="{% url 'sobre' %}" class="active">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <h2><i class="fas fa-info-circle"></i> Sobre o Projeto</h2>
+            
+            <p>
+                O <strong>TERMO-CP</strong> é uma ferramenta computacional desenvolvida para auxiliar estudantes e profissionais de engenharia mecânica na análise de sistemas termodinâmicos. O objetivo principal é simplificar o cálculo de propriedades e a simulação de processos em sistemas de cilindro-pistão.
+            </p>
+
+            <h3>Principais Funcionalidades</h3>
+            <ul class="card-grid">
+                <li class="card-item">
+                    <div class="icon-badge"><i class="fas fa-water"></i></div>
+                    <div class="card-desc">
+                        <strong>Propriedades da Água</strong>
+                        <span>Cálculo preciso (Líquido, Vapor, Saturação).</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge"><i class="fas fa-wind"></i></div>
+                    <div class="card-desc">
+                        <strong>Gás Ideal</strong>
+                        <span>Cálculos com constantes (R, k, Cp, Cv).</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge"><i class="fas fa-chart-line"></i></div>
+                    <div class="card-desc">
+                        <strong>Simulação</strong>
+                        <span>Gráficos de processos e ciclos.</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge"><i class="fas fa-calculator"></i></div>
+                    <div class="card-desc">
+                        <strong>Cálculos Auto</strong>
+                        <span>Trabalho (W), Calor (Q) e Entropia.</span>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Nomenclatura e Símbolos</h3>
+            <p style="font-size: 0.9em; color: #666;">Principais variáveis utilizadas nas equações:</p>
+            <ul class="card-grid">
+                <li class="card-item">
+                    <div class="icon-badge math">P</div>
+                    <div class="card-desc">
+                        <strong>Pressão</strong>
+                        <span>kPa / MPa</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">T</div>
+                    <div class="card-desc">
+                        <strong>Temperatura</strong>
+                        <span>°C / K</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">v</div>
+                    <div class="card-desc">
+                        <strong>Vol. Específico</strong>
+                        <span>m³/kg</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">u</div>
+                    <div class="card-desc">
+                        <strong>Energia Interna</strong>
+                        <span>kJ/kg</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">h</div>
+                    <div class="card-desc">
+                        <strong>Entalpia</strong>
+                        <span>kJ/kg</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">s</div>
+                    <div class="card-desc">
+                        <strong>Entropia</strong>
+                        <span>kJ/kg.K</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">x</div>
+                    <div class="card-desc">
+                        <strong>Título</strong>
+                        <span>(0 a 1)</span>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Constantes Adotadas</h3>
+            <ul class="card-grid">
+                <li class="card-item">
+                    <div class="icon-badge math" style="font-size: 1em;">R<sub>u</sub></div>
+                    <div class="card-desc">
+                        <strong>Constante Universal</strong>
+                        <span>8.314 kJ/kmol.K</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">R</div>
+                    <div class="card-desc">
+                        <strong>Constante do Gás</strong>
+                        <span>kJ/kg.K</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">k</div>
+                    <div class="card-desc">
+                        <strong>Coef. Adiabático</strong>
+                        <span>Adimensional (Cp/Cv)</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math" style="font-size: 0.9em;">Cp<sub>0</sub></div>
+                    <div class="card-desc">
+                        <strong>Calor Esp. (P)</strong>
+                        <span>kJ/kg.K</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math" style="font-size: 0.9em;">Cv<sub>0</sub></div>
+                    <div class="card-desc">
+                        <strong>Calor Esp. (V)</strong>
+                        <span>kJ/kg.K</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math" style="font-size: 1em;">P<sub>atm</sub></div>
+                    <div class="card-desc">
+                        <strong>Pressão Atm</strong>
+                        <span>101.325 kPa</span>
+                    </div>
+                </li>
+                <li class="card-item">
+                    <div class="icon-badge math">g</div>
+                    <div class="card-desc">
+                        <strong>Gravidade</strong>
+                        <span>9.81 m/s²</span>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Tecnologias Utilizadas</h3>
+            <div class="tech-tags">
+                <span class="tag"><i class="fab fa-python"></i> Python 3</span>
+                <span class="tag"><i class="fas fa-server"></i> Django</span>
+                <span class="tag"><i class="fab fa-html5"></i> HTML5</span>
+                <span class="tag"><i class="fab fa-js"></i> JavaScript</span>
+                <span class="tag"><i class="fas fa-cube"></i> P5.js</span>
+            </div>
+
+            <div class="button-container">
+                <a href="/" class="btn">
+                    <i class="fas fa-home" style="margin-right: 8px;"></i> Voltar ao Início
+                </a>
+                
+                <a href="https://termociclo.streamlit.app/" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i> Acessar TermoCiclo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processos da Água - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+
+    <style>
+        /* --- Identidade Visual Padrão --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px; 
+            flex-shrink: 0; 
+        }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+
+        /* LAYOUT PRINCIPAL (Split View) */
+        .main-content {
+            display: flex;
+            flex-direction: row; 
+            justify-content: center;
+            align-items: flex-start;
+            padding: 100px 20px 60px;
+            gap: 30px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Cartão de Resultados (Esquerda) */
+        .results-card {
+            flex: 1;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            min-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .results-card h2 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin: 0;
+        }
+
+        /* Seções de Dados (Abas virtuais) */
+        .data-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-water);
+        }
+
+        .data-section h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1em;
+        }
+        
+        .data-row:last-child { border-bottom: none; }
+        .data-label { font-weight: bold; color: #555; }
+        .data-value { font-weight: bold; color: var(--primary-color); }
+
+        /* Slider */
+        .slider-container {
+            text-align: center;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            border: 1px solid #dbeafe;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+            accent-color: var(--secondary-color);
+        }
+
+        /* Botões */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--hover-transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            font-weight: bold;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        .btn-primary:hover { background-color: var(--primary-color); transform: translateY(-2px); }
+
+        /* Container do Canvas (Direita) */
+        .visualization-container {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .scale-label {
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            font-family: 'Arial', sans-serif;
+            pointer-events: none;
+            text-align: right;
+            width: 60px;
+            z-index: 10;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover { color: #000; }
+
+        .modal-btn {
+            display: block;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .modal-btn:hover { background-color: var(--secondary-color); }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 2000;
+            font-size: 0.9em;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .results-card, .visualization-container { width: 100%; max-width: 800px; }
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            .main-content { padding-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        
+        <div class="results-card">
+            <h2><i class="fas fa-sync-alt"></i> Resultados</h2>
+
+            <div class="slider-container">
+                <label for="volumeSlider" style="font-weight: bold; color: var(--primary-color);">
+                    Visualizar: <span id="volumeValue">Estado Inicial</span>
+                </label>
+                <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: #666;">
+                    <span>Estado Inicial</span>
+                    <span>Estado Final</span>
+                </div>
+            </div>
+
+            <div class="data-section" id="stateInfo">
+                <h3>Dados do Estado</h3>
+                <div class="data-row"><span class="data-label">Fase:</span> <span class="data-value" id="faseVal">--</span></div>
+                <div class="data-row"><span class="data-label">Temperatura (T):</span> <span class="data-value" id="tempVal">--</span></div>
+                <div class="data-row"><span class="data-label">Pressão (P):</span> <span class="data-value" id="presVal">--</span></div>
+                <div class="data-row"><span class="data-label">Volume Específico (v):</span> <span class="data-value" id="volVal">--</span></div>
+                <div class="data-row"><span class="data-label">Energia Específica (u):</span> <span class="data-value" id="enerVal">--</span></div>
+                <div class="data-row"><span class="data-label">Entalpia Específica (h):</span> <span class="data-value" id="entVal">--</span></div>
+                <div class="data-row"><span class="data-label">Entropia Específica (s):</span> <span class="data-value" id="sVal">--</span></div>
+                <div class="data-row" id="tituloRow" style="display:none;"><span class="data-label">Título (x):</span> <span class="data-value" id="titVal">--</span></div>
+            </div>
+
+            <div class="data-section" style="border-left-color: var(--accent-gas);">
+                <h3>Resultados do Processo</h3>
+                <div class="data-row"><span class="data-label">Temperatura da Vizinhança:</span> <span class="data-value">{{ TempViz }} °C</span></div>
+                <div class="data-row"><span class="data-label">Calor (Q):</span> <span class="data-value">{{ Calor }} kJ</span></div>
+                <div class="data-row"><span class="data-label">Trabalho (W):</span> <span class="data-value">{{ Trabalho }} kJ</span></div>
+                <div class="data-row"><span class="data-label">Sger:</span> <span class="data-value">{{ Sger }} kJ/K</span></div>
+                {% if Sger < 0 %}
+                <div style="color: red; font-weight: bold; text-align: center; margin-top: 5px;">PROCESSO IMPOSSÍVEL!</div>
+                {% endif %}
+            </div>
+
+            <div class="button-group">
+                <a href="{% url 'ask_known4_3' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left" style="margin-right: 5px;"></i> Voltar
+                </a>
+                <button id="openModalBtn" class="btn btn-primary">
+                    Continuar Processo<i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="visualization-container" id="canvas-wrapper">
+            <div id="scale-container"></div>
+        </div>
+
+    </div>
+
+    <div id="processModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 style="color: var(--primary-color);">Continuar Processo</h3>
+            <p>Selecione o próximo passo:</p>
+            
+            {% if teste3 %}
+                <a href="{% url 'ask_known3_3' %}" class="modal-btn">Aquecimento/Resfriamento à Pressão Constante</a>
+                <a href="{% url 'ask_known3_5' %}" class="modal-btn">Aquecimento/Resfriamento à Volume Constante</a>
+                <a href="{% url 'ask_known3_4' %}" class="modal-btn">Compressão/Expansão Adiabática e Reversível</a>
+            {% else %}
+                <a href="{% url 'ask_known3_3' %}" class="modal-btn">Aquecimento/Resfriamento à Pressão Constante</a>
+                <a href="{% url 'ask_known3_5' %}" class="modal-btn">Aquecimento/Resfriamento à Volume Constante</a>
+                <a href="{% url 'ask_known3_4' %}" class="modal-btn">Compressão/Expansão Adiabática e Reversível</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+
+    <script>
+        // --- LÓGICA DE DADOS (Estado 1 e 2) ---
+        const state1 = {
+            fase: "{% if fase == 1 %}Líquido Comprimido{% elif fase == 2 %}Vapor Superaquecido{% else %} Região de Saturação{% endif %}",
+            temp: "{{ temperatura }} °C",
+            pres: "{{ pressao }} kPa",
+            vol: "{{ volume_especifico }} m³/kg",
+            ener: "{{ energia_interna }} kJ/kg",
+            ent: "{{ entalpia_especifica }} kJ/kg",
+            s: "{{ entropia_especifica }} kJ/kg.K",
+            titulo: "{% if fase == 3 %}{{ titulo }} %{% endif %}",
+            rawFase: parseInt("{{ fase }}"),
+            rawVol: parseFloat("{{ volume_especifico }}".replace(',', '.')),
+            rawVL: parseFloat("{{ VolumeL }}".replace(',', '.'))
+        };
+
+        const state2 = {
+            fase: "{% if fase == 1 %}Líquido Comprimido{% elif fase == 2 %}Vapor Superaquecido{% else %} Região de Saturação{% endif %}",   
+            temp: "{{ temperatura2 }} °C",
+            pres: "{{ pressao2 }} kPa",
+            vol: "{{ volume_especifico2 }} m³/kg",
+            ener: "{{ energia_interna2 }} kJ/kg",
+            ent: "{{ entalpia_especifica2 }} kJ/kg",
+            s: "{{ entropia_especifica2 }} kJ/kg.K",
+            titulo: "{% if fase2 == 3 %}{{ titulo2 }} %{% endif %}",
+            rawFase: parseInt("{{ fase2 }}"),
+            rawVol: parseFloat("{{ volume_especifico2 }}".replace(',', '.')),
+            rawVL: parseFloat("{{ VolumeL2 }}".replace(',', '.'))
+        };
+
+        let currentDataFase = state1.rawFase;
+        let currentDataVolume = state1.rawVol;
+        let currentDataVL = state1.rawVL;
+
+        // Atualiza a UI com dados do estado
+        function updateUI(state, labelText) {
+            document.getElementById('volumeValue').textContent = labelText;
+            document.getElementById('faseVal').textContent = state.fase;
+            document.getElementById('tempVal').textContent = state.temp;
+            document.getElementById('presVal').textContent = state.pres;
+            document.getElementById('volVal').textContent = state.vol;
+            document.getElementById('enerVal').textContent = state.ener;
+            document.getElementById('entVal').textContent = state.ent;
+            document.getElementById('sVal').textContent = state.s;
+
+            const titRow = document.getElementById('tituloRow');
+            if(state.titulo) {
+                titRow.style.display = 'flex';
+                document.getElementById('titVal').textContent = state.titulo;
+            } else {
+                titRow.style.display = 'none';
+            }
+        }
+
+        // Listener do Slider
+        const slider = document.getElementById("volumeSlider");
+        slider.addEventListener("input", () => {
+            if (slider.value === "1") {
+                updateUI(state1, "Estado Inicial");
+                currentDataFase = state1.rawFase;
+                currentDataVolume = state1.rawVol;
+                currentDataVL = state1.rawVL;
+                estado = 1; // Dispara animação
+            } else {
+                updateUI(state2, "Estado Final");
+                currentDataFase = state2.rawFase;
+                currentDataVolume = state2.rawVol;
+                currentDataVL = state2.rawVL;
+                estado = 1; // Dispara animação
+            }
+        });
+
+        // Inicializa UI
+        updateUI(state1, "Estado Inicial");
+
+        // --- LÓGICA DO MODAL ---
+        const modal = document.getElementById("processModal");
+        const openBtn = document.getElementById("openModalBtn");
+        const closeBtn = document.querySelector(".close-btn");
+
+        openBtn.onclick = () => modal.style.display = "block";
+        closeBtn.onclick = () => modal.style.display = "none";
+        window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; }
+
+        // --- LÓGICA P5.JS ---
+        let sides = 72, r1 = 100, r2 = 102, r3 = 100, r4 = 100, h2 = 300;
+        let ha1 = 100, ha4 = 100, hemboloB = 100, hemboloC = 60;
+        let targetHa1 = ha1, targetHa4 = ha4, targetH3B = hemboloB, targetH3C = hemboloC;
+        let estado = 1; // Força render inicial
+        let canvas;
+
+        function setup() {
+            canvas = createCanvas(500, 600, WEBGL);
+            canvas.parent('canvas-wrapper');
+            noStroke();
+            setTimeout(createHtmlScale, 100);
+        }
+
+        function draw() {
+            background(0);
+            lights();
+            translate(0, 100);
+
+            // Interpolação suave
+            ha1 = lerp(ha1, targetHa1, 0.05);
+            ha4 = lerp(ha4, targetHa4, 0.05);
+            hemboloB = lerp(hemboloB, targetH3B, 0.05);
+            hemboloC = lerp(hemboloC, targetH3C, 0.05);
+
+            // Água
+            if (ha1 < 100) {
+                fill(29, 115, 188, 300);
+                drawCap(r1, ha1); drawCap(r1, 100); drawSide(r1, ha1, 100);
+            }
+            // Vapor
+            if (ha4 < 100) {
+                fill(29, 115, 188, 30);
+                drawCap(r4, ha4); drawCap(r4, 100); drawSide(r4, ha4, 100);
+            }
+            // Êmbolo
+            fill(162, 162, 162);
+            drawCap(r3, hemboloB); drawCap(r3, hemboloC); drawSide(r3, hemboloC, hemboloB);
+            // Cilindro
+            fill(255, 255, 255, 10);
+            drawCap(r2, 100); drawSide(r2, 100, -h2);
+
+            comandos();
+            drawLogScaleLines(r2, -266, 108);
+        }
+
+        function createHtmlScale() {
+            const scaleContainer = document.getElementById('scale-container');
+            scaleContainer.innerHTML = ''; 
+            const canvasRect = canvas.elt.getBoundingClientRect();
+            const wrapperRect = document.getElementById('canvas-wrapper').getBoundingClientRect();
+            const canvasCenterX = (canvasRect.left - wrapperRect.left) + width / 2;
+            const canvasCenterY = (canvasRect.top - wrapperRect.top) + height / 2;
+
+            let logDivisions = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000];
+            for (let div of logDivisions) {
+                let yPosP5 = logDivisionToHeight(div, -266, 108);
+                let yPosCSS = canvasCenterY + 100 + yPosP5 - 6;
+                let xPosCSS = canvasCenterX - r2 - 85;
+                
+                let label = document.createElement('div');
+                label.className = 'scale-label';
+                label.innerText = div; // Simplificado para exemplo
+                label.style.top = yPosCSS + 'px';
+                label.style.left = xPosCSS + 'px';
+                scaleContainer.appendChild(label);
+            }
+        }
+
+        function windowResized() { setTimeout(createHtmlScale, 100); }
+
+        // Funções auxiliares de desenho (drawCap, drawSide, etc.) mantidas iguais...
+        function drawCap(radius, y) {
+            beginShape(TRIANGLE_FAN); vertex(0, y, 0);
+            for (let j = 0; j <= sides; j++) {
+                let theta = TWO_PI / sides * j;
+                vertex(cos(theta) * radius, y, sin(theta) * radius);
+            }
+            endShape(CLOSE);
+        }
+        function drawSide(radius, topY, bottomY) {
+            beginShape(TRIANGLE_STRIP);
+            for (let j = 0; j <= sides; j++) {
+                let theta = TWO_PI / sides * j;
+                vertex(cos(theta) * radius, topY, sin(theta) * radius);
+                vertex(cos(theta) * radius, bottomY, sin(theta) * radius);
+            }
+            endShape(CLOSE);
+        }
+        function drawLogScaleLines(radius, min, max) {
+            stroke(255); strokeWeight(1);
+            [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000].forEach(d => {
+                let y = logDivisionToHeight(d, min, max);
+                line(-radius-10, y, -radius, y);
+            });
+            noStroke();
+        }
+        function logDivisionToHeight(val, min, max) {
+            return map(log(val), log(0.0001), log(1000), max, min);
+        }
+
+        function comandos() {
+            if (estado == 1) {
+                try {
+                    let opcao = currentDataFase;
+                    if (opcao == 1) { // Líquido
+                        targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
+                        targetH3C = targetH3B - 40;
+                        targetHa1 = targetH3B;
+                        targetHa4 = logDivisionToHeight(-0.00001, -260, 100);
+                    } else if (opcao == 2) { // Vapor Super
+                        targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
+                        targetH3C = targetH3B - 40;
+                        targetHa4 = targetH3B;
+                        targetHa1 = logDivisionToHeight(-0.00001, -260, 100);
+                    } else if (opcao == 3) { // Saturação
+                        targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
+                        targetH3C = targetH3B - 40;
+                        targetHa4 = targetH3B;
+                        targetHa1 = logDivisionToHeight(currentDataVL, -260, 100);
+                    }
+                    estado = 0;
+                } catch (e) { console.error(e); }
+            }
+        }
+    </script>
+</body>
+</html>

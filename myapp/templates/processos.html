@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processos Água - TERMO-CP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png"> 
+    
+    <style>
+        /* Variáveis CSS - Padrão do Site */
+        :root {
+            --primary-color: #20376B; /* Azul Escuro */
+            --secondary-color: #0D6AB0; /* Azul Médio */
+            --accent-water: #00A8FF; /* Azul Claro/Ciano (Água) */
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        /* Base e Layout */
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; 
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px; 
+            flex-shrink: 0; 
+        }
+        
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+        
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 40px;
+            width: 100%;
+            justify-content: flex-start;
+        }
+        
+        .container {
+            max-width: 600px; /* Um pouco mais largo para os nomes dos processos */
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        h2 { color: var(--primary-color); font-size: 2em; margin-bottom: 5px; }
+        p { font-size: 1.1em; line-height: 1.6; margin-bottom: 20px; }
+        
+        .button-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            margin-top: 20px; 
+            align-items: center; 
+            width: 100%; 
+        }
+
+        /* --- ESTILO DOS BOTÕES (Mesmo padrão da página Água) --- */
+        
+        .process-button { 
+            display: flex; 
+            align-items: center; 
+            padding: 15px; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-size: 1.1em; 
+            transition: var(--hover-transition); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            width: 100%; 
+            position: relative; /* Necessário para o ícone absoluto */
+            background-color: var(--primary-color); 
+            font-weight: bold; 
+            justify-content: center; /* Centraliza o texto */
+            min-height: 60px; /* Altura mínima para caber texto em duas linhas se precisar */
+        }
+        
+        .process-button:hover { 
+            background-color: var(--secondary-color); 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        }
+
+        /* Ícone da Esquerda (Fixo) */
+        .process-button .icon-left {
+            position: absolute;
+            left: 20px;
+            font-size: 1.3em;
+        }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: auto;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: static; }
+            header h1 { margin-right: 0; margin-bottom: 10px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            nav a { margin: 5px 8px; }
+            .main-content { padding-top: 20px; }
+            
+            /* Ajuste Mobile para botões */
+            .process-button { 
+                justify-content: flex-start; /* Alinha à esquerda no mobile para evitar sobreposição */
+                text-align: left;
+                padding-left: 50px; /* Espaço para o ícone */
+            }
+            .process-button .icon-left {
+                left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/">Início</a>
+            <a href="{% url 'cilindro' %}" class="active">Água</a>
+            <a href="{% url 'gasideal' %}">Gás Ideal</a>
+            <a href="{% url 'sobre' %}">Sobre</a>
+            <a href="{% url 'contato' %}">Contato</a>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <i class="fas fa-cogs hero-icon" style="font-size: 3em; color: var(--accent-water); margin-bottom: 10px;"></i>
+            
+            <h2>Processos (Água)</h2>
+            <p>Selecione uma das opções abaixo para explorar os processos no Cilindro Pistão com Água.</p>
+            
+            <div class="button-container">
+                
+                {% if lista_estados %}
+                    <a href="{% url 'ask_known3_3' %}" class="process-button">
+                        <i class="fas fa-tachometer-alt icon-left"></i> 
+                        Aquecimento/Resfriamento à pressão constante
+                    </a>
+                {% else %}
+                    <a href="{% url 'ask_known1_3' %}" class="process-button">
+                        <i class="fas fa-tachometer-alt icon-left"></i> 
+                        Aquecimento/Resfriamento à pressão constante
+                    </a>
+                {% endif %}
+                
+                <a href="{% url 'ask_known1_5' %}" class="process-button">
+                    <i class="fas fa-box icon-left"></i> 
+                    Aquecimento/Resfriamento à volume constante
+                </a>
+                
+                <a href="{% url 'ask_known1_4' %}" class="process-button">
+                    <i class="fas fa-shield-alt icon-left"></i> 
+                    Compressão/Expansão adiabática e reversível
+                </a>
+
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mantendo seu script de lógica
+        let teste3String = localStorage.getItem('teste3');
+        let teste3Obj = JSON.parse(teste3String); 
+    
+        console.log("Objeto teste3 recebido:", teste3Obj);
+    
+        window.onload = function() {
+            let el = document.getElementById('mostrarTeste3');
+            if (el && teste3Obj) {
+                el.textContent = JSON.stringify(teste3Obj, null, 2);
+            }
+        }
+    </script>
+
+    <footer>
+        &copy; 2025 TERMO-CP. Todos os direitos reservados.
+    </footer>
+</body>
+</html>

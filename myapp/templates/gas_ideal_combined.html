@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gás Ideal - Cálculo</title>
+</head>
+<body>
+    <h1>Calculadora de Gás Ideal</h1>
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Constante dos Gases (R)</legend>
+            {{ form_r.as_p }}
+        </fieldset>
+
+        <fieldset>
+            <legend>Primeira Propriedade Conhecida</legend>
+            {{ form1.as_p }}
+        </fieldset>
+
+        <fieldset>
+            <legend>Segunda Propriedade Conhecida</legend>
+            {{ form2.as_p }}
+        </fieldset>
+
+        <button type="submit">Calcular</button>
+    </form>
+
+    {% if result %}
+        <h2>Resultado:</h2>
+        <p>Temperatura: {{ result.temperatura }}</p>
+        <p>Pressão: {{ result.pressao }}</p>
+        <p>Volume: {{ result.volume }}</p>
+        <p>R: {{ result.R }}</p>
+    {% elif error %}
+        <p style="color:red;">Erro: {{ error }}</p>
+    {% endif %}
+</body>
+</html>
